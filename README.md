@@ -1,7 +1,7 @@
 # Pruebas automáticas en OWGIS
 Scripts para realizar pruebas automáticas para los diversos OWGIS del grupo IOA usando python y Selenium
 
-##Primeros pasos
+## Primeros pasos
 Para obtener la copia del proyecto solo es necesario clonar el proyecto usando la instrucción:
 
 `git clone`
@@ -24,10 +24,10 @@ Ya creado el ambiente se puede cambiar a él usando la instrucción:
 
 dentro del ambiente se instalan la bibliotecas correspondientes.
 
-###pandas:
+### pandas:
 `conda install -c anaconda pandas`
 
-###Selenium:
+### Selenium:
 `conda install -c anaconda selenium`
 
 Actualmente el proyecto cuenta con el driver para usar el navegador chrome, para usar firefox como navegador se puede consultar la documentacion de [Selenium](https://www.seleniumhq.org/docs/03_webdriver.jsp).
