@@ -731,19 +731,19 @@ def main():
         driver = initDriver("chrome")
         check_global(dir_global,driver)
     elif page == 2:
-        driver = initDriver("firefox")
+        driver = initDriver("chrome")
         check_meteo(dir_met,driver)
     elif page == 3:
-        driver = initDriver("firefox")
+        driver = initDriver("chrome")
         check_oleaje(dir_olea,driver)
     elif page == 4:
         driver = initDriver("chrome")
         check_global(dir_global,driver)
         time.sleep(10)
-        driver = initDriver("firefox")
+        driver = initDriver("chrome")
         check_meteo(dir_met,driver)
         time.sleep(10)
-        driver = initDriver("firefox")
+        driver = initDriver("chrome")
         check_oleaje(dir_olea,driver)
     else:
         print("Opcion incorrecta")
