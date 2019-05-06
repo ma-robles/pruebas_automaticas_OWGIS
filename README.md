@@ -32,7 +32,7 @@ dentro del ambiente se instalan la bibliotecas correspondientes.
 ### Selenium:
 `conda install -c anaconda selenium`
 
-Actualmente el proyecto cuenta con el driver para usar el navegador Chrome Versión 74.0.3729.131, para usar firefox como navegador se puede consultar la documentacion de [Selenium](https://www.seleniumhq.org/docs/03_webdriver.jsp) o si la versión de Chrome es diferente a la mencionada descargue la correspondiente [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
+Actualmente el proyecto cuenta con el driver para usar el navegador Chrome Versión 74.0.3729.131, para usar firefox como navegador se puede consultar la documentacion de [Selenium](https://www.seleniumhq.org/docs/03_webdriver.jsp) o si la versión de Chrome es diferente a la mencionada descargue el correspondiente [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
 
 ## Probando
 
