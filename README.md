@@ -4,7 +4,7 @@ Scripts para realizar pruebas automáticas para los diversos OWGIS del grupo IOA
 ## Primeros pasos
 Para obtener la copia del proyecto solo es necesario clonar el proyecto usando la instrucción:
 
-`git clone`
+`git clone https://github.com/grupoioa/pruebas_automaticas_OWGIS.git`
 
 Hay que contar con chrome o firefox instalados (chrome recomendado), además de los prerrequisitos que se describen a continuación.
 
@@ -35,13 +35,6 @@ dentro del ambiente se instalan la bibliotecas correspondientes.
 Actualmente el proyecto cuenta con el driver para usar el navegador chrome, para usar firefox como navegador se puede consultar la documentacion de [Selenium](https://www.seleniumhq.org/docs/03_webdriver.jsp).
 
 ## Probando
-
-Antes de ejecutar las pruebas dentro del archivo /modulos/Automatic_test.sh hay que modificar la linea 3, si se tiene un ambiente en anaconda hay que modificar el nombre del ambiente.
-Ejemplo:
-
-`source ~/anaconda3/envs/tensorflow/bin/activate nombreAmbiente`
-
-Si no se tiene ambiente, basta con comentar la linea.
 
 Para ejecutar la pruebas automáticas hay que entrar en carpeta /modulos y ejecutar la siguiente instrucción:
 
