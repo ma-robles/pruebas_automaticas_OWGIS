@@ -20,6 +20,7 @@ import configparser
 import sys
 import pandas as df
 import time
+import os
 
 
 def initDriver(browser):
@@ -168,7 +169,7 @@ def change3d(driver,nombre):
     :return: direccion del screenshot
     """
     if not os.path.exists('../Data/screenshots/'):
-            os.makedirs('../Data/screenshots/'')
+            os.makedirs('../Data/screenshots/')
     driver.execute_script( "updateAnimationStatus('none');")
     time.sleep(5)
     dir = "../Data/screenshots/"+nombre+'.png'
