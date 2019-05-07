@@ -167,6 +167,8 @@ def change3d(driver,nombre):
     :type nombre: String
     :return: direccion del screenshot
     """
+    if not os.path.exists('../Data/screenshots/'):
+            os.makedirs('../Data/screenshots/'')
     driver.execute_script( "updateAnimationStatus('none');")
     time.sleep(5)
     dir = "../Data/screenshots/"+nombre+'.png'
@@ -352,6 +354,8 @@ def catch_log(driver, nombre):
     msn1 = ""
     msn2 = ""
     saveFile = "../Data/logs/" + nombre + '.txt'
+    if not os.path.exists('../Data/logs/'):
+            os.makedirs('../Data/logs/')
     for entry in driver.get_log('browser'):
         if "Not possible to read JSON data for" in entry['message']:
             msn += entry['message'] + '\n'
