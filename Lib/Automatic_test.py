@@ -745,23 +745,35 @@ def main():
     dir_met = config.get("test","meteo")
     dir_olea = config.get("test","oleaje")
     if page == 1:
-        driver = initDriver("chrome")
-        check_global(dir_global,driver)
+        try:
+            driver = initDriver("chrome")
+            check_global(dir_global,driver)
+        except:
+            print("Error en la pagina: "+ dir_global+ " no se puede mostrar")
     elif page == 2:
-        driver = initDriver("chrome")
-        check_meteo(dir_met,driver)
+        try:
+            driver = initDriver("chrome")
+            check_meteo(dir_met,driver)
+        except:
+            print("Error en la pagina: "+ dir_met+ " no se puede mostrar")
     elif page == 3:
-        driver = initDriver("chrome")
-        check_oleaje(dir_olea,driver)
+        try:
+            driver = initDriver("chrome")
+            check_oleaje(dir_olea,driver)
+        except:
+            print("Error en la pagina: "+ dir_olea+ " no se puede mostrar")
     elif page == 4:
-        driver = initDriver("chrome")
-        check_global(dir_global,driver)
-        time.sleep(10)
-        driver = initDriver("chrome")
-        check_meteo(dir_met,driver)
-        time.sleep(10)
-        driver = initDriver("chrome")
-        check_oleaje(dir_olea,driver)
+        try:
+            driver = initDriver("chrome")
+            check_global(dir_global,driver)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_meteo(dir_met,driver)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_oleaje(dir_olea,driver)
+        except:
+            print("Error en la paginas: "+ dir_global+" "+ dir_met+" "+ dir_olea+" no se puede mostrar")
     else:
         print("Opcion incorrecta")
 
