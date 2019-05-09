@@ -498,7 +498,11 @@ def check_oleaje(dir,driver):
     a_3ds = []
     print(dir)
     print("--------Test Oleaje--------")
-    driver.get(dir)
+    try:
+        driver.get(dir)
+    except:
+        print("La pagina proporcionada no existe o no esta disponible")
+        return null
     driver.execute_script("animatePositionMap(2.0,[-10602433.379006794, 2546668.0769200223]);")
     for xs in menuLevel1 :
         change_layer(driver,'dropDownLevels1',xs)
@@ -553,7 +557,11 @@ def check_meteo(dir,driver):
     a_3ds = []
     print(dir)
     print("--------Test Meteorologico--------")
-    driver.get(dir)
+    try:
+        driver.get(dir)
+    except:
+        print("La pagina proporcionada no existe o no esta disponible")
+        return null
     for xs in menuLevel1:
         change_layer(driver,'dropDownLevels1',xs)
         for ys in menuLevel2:
@@ -657,7 +665,11 @@ def check_global(dir,driver):
     a_3ds = []
     print(dir)
     print("--------Test "+menuLevel1[0]+"--------")
-    driver.get(dir)
+    try:
+        driver.get(dir)
+    except:
+        print("La pagina proporcionada no existe o no esta disponible")
+        return null
     for xs in menuLevel2:
         change_layer(driver,'dropDownLevels2',xs)
         nombre = menuLevel1[0]+"-"+xs
