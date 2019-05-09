@@ -170,7 +170,10 @@ def change3d(driver,nombre):
     """
     if not os.path.exists('../Data/screenshots/'):
             os.makedirs('../Data/screenshots/')
-    driver.execute_script( "updateAnimationStatus('none');")
+    try:
+        driver.execute_script( "updateAnimationStatus('none');")
+    except:
+        return "Error en la capa: " + nombre
     time.sleep(5)
     dir = "../Data/screenshots/"+nombre+'.png'
     element = driver.execute_script("owgis.cesium.toogleCesium();")
@@ -745,35 +748,23 @@ def main():
     dir_met = config.get("test","meteo")
     dir_olea = config.get("test","oleaje")
     if page == 1:
-        try:
-            driver = initDriver("chrome")
-            check_global(dir_global,driver)
-        except:
-            print("Error en la pagina: "+ dir_global+ " no se puede mostrar")
+        driver = initDriver("chrome")
+        check_global(dir_global,driver)
     elif page == 2:
-        try:
-            driver = initDriver("chrome")
-            check_meteo(dir_met,driver)
-        except:
-            print("Error en la pagina: "+ dir_met+ " no se puede mostrar")
+        driver = initDriver("chrome")
+        check_meteo(dir_met,driver)
     elif page == 3:
-        try:
-            driver = initDriver("chrome")
-            check_oleaje(dir_olea,driver)
-        except:
-            print("Error en la pagina: "+ dir_olea+ " no se puede mostrar")
+        driver = initDriver("chrome")
+        check_oleaje(dir_olea,driver)
     elif page == 4:
-        try:
-            driver = initDriver("chrome")
-            check_global(dir_global,driver)
-            time.sleep(10)
-            driver = initDriver("chrome")
-            check_meteo(dir_met,driver)
-            time.sleep(10)
-            driver = initDriver("chrome")
-            check_oleaje(dir_olea,driver)
-        except:
-            print("Error en la paginas: "+ dir_global+" "+ dir_met+" "+ dir_olea+" no se puede mostrar")
+        driver = initDriver("chrome")
+        check_global(dir_global,driver)
+        time.sleep(10)
+        driver = initDriver("chrome")
+        check_meteo(dir_met,driver)
+        time.sleep(10)
+        driver = initDriver("chrome")
+        check_oleaje(dir_olea,driver)
     else:
         print("Opcion incorrecta")
 
