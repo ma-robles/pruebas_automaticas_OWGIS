@@ -118,6 +118,7 @@ def check_total_load(driver):
         #element = driver.find_element_by_id("ol-unselectable")
         return (True, msn)
     except:
+        print('Error en la revision de la capa de fondo')
         return (False, msn)
 
 
@@ -434,8 +435,13 @@ def checkCalendar(driver, nombre):
     day = time.strftime("%d")
     month = time.strftime("%m")
     year = time.strftime("%Y")
-    cal = driver.find_elements_by_class_name("ui-datepicker-today")
-    month_des = driver.find_elements_by_class_name("ui-datepicker-month")
+    try:
+        cal = driver.find_elements_by_class_name("ui-datepicker-today")
+        month_des = driver.find_elements_by_class_name("ui-datepicker-month")
+    except:
+        print('Problemas en la revision de los calendarios')
+        return (False,msn)
+
     if len(month_des)==0:
         return (True,msn)
     month_cal_fin = month_to_int(month_des[1].text)
@@ -749,22 +755,34 @@ def main():
     dir_olea = config.get("test","oleaje")
     if page == 1:
         driver = initDriver("chrome")
-        check_global(dir_global,driver)
+        try:
+            check_global(dir_global,driver)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_global)
     elif page == 2:
         driver = initDriver("chrome")
-        check_meteo(dir_met,driver)
+        try:
+            check_meteo(dir_met,driver)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_met)
     elif page == 3:
         driver = initDriver("chrome")
-        check_oleaje(dir_olea,driver)
+        try:
+            check_oleaje(dir_olea,driver)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_olea)
     elif page == 4:
-        driver = initDriver("chrome")
-        check_global(dir_global,driver)
-        time.sleep(10)
-        driver = initDriver("chrome")
-        check_meteo(dir_met,driver)
-        time.sleep(10)
-        driver = initDriver("chrome")
-        check_oleaje(dir_olea,driver)
+        try:
+            driver = initDriver("chrome")
+            check_global(dir_global,driver)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_meteo(dir_met,driver)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_oleaje(dir_olea,driver)
+        except:
+            print('Error en el navegador revisando laa paginas')
     else:
         print("Opcion incorrecta")
 
