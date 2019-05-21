@@ -2,7 +2,7 @@
 File name : Automatic_test.py
 Author: Pablo Camacho Gonzalez
 Python version: 3.7.3
-Date last modified: 02/05/2019
+Date last modified: 13/05/2019
 '''
 
 
@@ -204,9 +204,9 @@ def change_bavklayers(driver):
     :type driver: driver
     :return: DataFrame
     """
+    print("Revisando capas de fondo...")
     status = []
     name = []
-
     #driver.get(dir)
     #backLayers = ['googler','osm','bingr','binga','bingh']
     backLayers = ['googler','osm','bingr','binga','bingh','wms']
@@ -248,12 +248,12 @@ def check_loading(driver):
         time.sleep(2)
         check_alert1(driver)
         load = driver.find_element_by_id('loadperc')
-        print("porcentaje: "+load.text)
+        #print("porcentaje: "+load.text)
         repet = 0
         if load.text == "":
             return True
         else:
-            print("revision porcentaje")
+            #print("revision porcentaje")
             split_load = load.text.split(" ")
             if len(split_load) == 3:
                 percents = int(split_load[1])
@@ -264,7 +264,7 @@ def check_loading(driver):
                 check_alert(driver)
                 time.sleep(5)
                 load=driver.find_element_by_id('loadperc')
-                print(load.text)
+                #print(load.text)
                 if load.text == "":
                     return True
                 else:
@@ -301,13 +301,13 @@ def check_animation(driver):
         time.sleep(2)
         check_alert1(driver)
         load = driver.find_element_by_id('loadperc')
-        print("porcentaje: "+load.text)
+        #print("porcentaje: "+load.text)
         repet = 0
         if load.text == "":
             driver.execute_script( "updateAnimationStatus('none');")
             return True
         else:
-            print("revision porcentaje")
+            #print("revision porcentaje")
             split_load = load.text.split(" ")
             if len(split_load) == 3:
                 percents = int(split_load[1])
@@ -318,7 +318,7 @@ def check_animation(driver):
                 check_alert(driver)
                 time.sleep(5)
                 load=driver.find_element_by_id('loadperc')
-                print(load.text)
+                #print(load.text)
                 if load.text == "":
                     driver.execute_script( "updateAnimationStatus('none');")
                     return True
@@ -413,7 +413,8 @@ def month_to_int(month):
     elif month == "December" or month == "diciembre":
         return 12
     else:
-        print('null')
+
+        #print('null')
         return null
 
 
@@ -445,14 +446,14 @@ def checkCalendar(driver, nombre):
     if len(month_des)==0:
         return (True,msn)
     month_cal_fin = month_to_int(month_des[1].text)
-    print(month_cal_fin)
+    #print(month_cal_fin)
     month_cal_init = month_to_int(month_des[0].text)
     select_fin = driver.find_elements_by_class_name("ui-state-active")
     currents = driver.find_elements(By.XPATH,"//*[@data-handler=\'selectDay\']")
     for xs in cal:
         slect = xs.get_attribute("data-handler")
         if (xs.text.zfill(2) == day) and (slect== 'selectDay') and ((int(select_fin[1].text)>int(xs.text)) or (int(month_cal_fin) > int(month))):
-            print("True")
+            #print("True")
             correct=True
         else:
             msn = catch_log(driver, nombre+"_calendar")
@@ -485,6 +486,15 @@ def create_report(infoName,streamlines, calendar,messenger, animation,v3d):
     animations = df.DataFrame(animation, columns=["Estatus animacion"])
     ver_3d =  df.DataFrame(v3d, columns=["Estatus 3D"])
     report = df.concat([dataNombre,strem,calendar,animations,ver_3d,messenger],axis=1)
+    heatmap = df.concat([strem,calendar,animations],axis=1)
+    # plt.figure(figsize=(12.2,8.4))
+    # plt.title("Reporte de pruebas");
+    # plt.pcolor(heatmap)
+    # plt.xticks(fontsize=8)
+    # plt.savefig("../Data/reporte.png")
+    # plt.show()
+    # plt.clf()
+    # plt.close()
     #report = df.DataFrame([name,streamlines,calendar],columns=['Nombre','Estatus Streamlines', 'Estatus Calendario'])
     return report
 
@@ -517,12 +527,12 @@ def check_oleaje(dir,driver):
         change_layer(driver,'dropDownLevels1',xs)
         for ys in menuLevel2:
             nombre = xs+"-"+ys
+            print(nombre)
             change_layer(driver, 'dropDownLevels2',ys)
             streamline = check_load_streamlines(driver,nombre)
             calendar = checkCalendar(driver,nombre)
             rev = check_animation(driver)
             a3d = change3d(driver,nombre)
-            #print(nombre)
             a_3ds.append(a3d)
             animations.append(rev)
             nombres.append(nombre)
@@ -579,6 +589,7 @@ def check_meteo(dir,driver):
                 for zs in menuPreci:
                     change_layer(driver,'dropDownLevels3',zs)
                     nombre = xs+"-"+ys+'-'+zs
+                    print(nombre)
                     try:
                         streamline = check_load_streamlines(driver, nombre)
                     except:
@@ -586,7 +597,6 @@ def check_meteo(dir,driver):
                     calendar = checkCalendar(driver, nombre)
                     rev = check_animation(driver)
                     a3d = change3d(driver,nombre)
-                    #print(nombre)
                     a_3ds.append(a3d)
                     animations.append(rev)
                     nombres.append(nombre)
@@ -597,6 +607,7 @@ def check_meteo(dir,driver):
                 for zs in menuViento:
                     change_layer(driver,'dropDownLevels3',zs)
                     nombre = xs+"-"+ys+'-'+zs
+                    print(nombre)
                     streamline = check_load_streamlines(driver, nombre)
                     calendar = checkCalendar(driver, nombre)
                     rev = check_animation(driver)
@@ -612,11 +623,11 @@ def check_meteo(dir,driver):
                     r = change_layer(driver,'dropDownLevels3',zs)
                     if r:
                         nombre = xs+"-"+ys+'-'+zs
+                        print(nombre)
                         streamline = check_load_streamlines(driver, nombre)
                         calendar = checkCalendar(driver, nombre)
                         rev = check_animation(driver)
                         a3d = change3d(driver,nombre)
-                        #print(nombre)
                         a_3ds.append(a3d)
                         animations.append(rev)
                         nombres.append(nombre)
@@ -627,11 +638,11 @@ def check_meteo(dir,driver):
                         pass
             else:
                 nombre = xs+"-"+ys
+                print(nombre)
                 streamline = check_load_streamlines(driver, nombre)
                 calendar = checkCalendar(driver, nombre)
                 rev = check_animation(driver)
                 a3d = change3d(driver,nombre)
-                #print(nombre)
                 a_3ds.append(a3d)
                 animations.append(rev)
                 nombres.append(nombre)
@@ -682,11 +693,11 @@ def check_global(dir,driver):
     for xs in menuLevel2:
         change_layer(driver,'dropDownLevels2',xs)
         nombre = menuLevel1[0]+"-"+xs
+        print(nombre)
         streamline = check_load_streamlines(driver, nombre)
         calendar = checkCalendar(driver, nombre)
         rev = check_animation(driver)
         a3d = change3d(driver,nombre)
-        #print(nombre)
         a_3ds.append(a3d)
         animation.append(rev)
         nombres.append(nombre)
@@ -701,11 +712,11 @@ def check_global(dir,driver):
     for xs in menuLevel2_gfs:
         change_layer(driver,'dropDownLevels2',xs)
         nombre = menuLevel1[1]+"-"+xs
+        print(nombre)
         streamline= check_load_streamlines(driver, nombre)
         calendar = checkCalendar(driver, nombre)
         rev = check_animation(driver)
         a3d = change3d(driver,nombre)
-        #print(nombre)
         a_3ds.append(a3d)
         animation.append(rev)
         nombres.append(nombre)
@@ -717,11 +728,11 @@ def check_global(dir,driver):
             r = change_layer(driver,'dropDownLevels3',ys)
             if r :
                 nombre = menuLevel1[1]+"-"+xs+"-"+ys
+                print(nombre)
                 stremaline = check_load_streamlines(driver, nombre)
                 calendar = checkCalendar(driver, nombre)
                 rev = check_animation(driver)
                 a3d = change3d(driver,nombre)
-                #print(nombre)
                 a_3ds.append(a3d)
                 animation.append(rev)
                 nombres.append(nombre)
@@ -744,34 +755,61 @@ def check_global(dir,driver):
         print(df_global)
         print("Proceso terminado")
 
+def menu():
+    print("---------------------------------------------------------------------------------------------------------")
+    print(" ")
+    print("                         SISTEMA DE PRUEBAS PARA OWGIS")
+    print(" ")
+    print("     + Espere a que el sistema realice las pruebas.")
+    print("     + Al terminal se imprime el resultado de las pruebas realizadas.")
+    print("     + True si la prueba se cumplio.")
+    print("     + False si la prueba no se cumplio.")
+    print("     + Se puede revisar el log de errores en el archivo que se describe en la columna LOG")
+    print("     + El reporte tambien se puede consultar en el archivo report_nombreOwgis.csv en la carpeta /Data")
+    print(" ")
+    print("                  TIEMPO ESTIMADO DE LAS PRUEBAS: 25 A 50 MINUTOS")
+    print("---------------------------------------------------------------------------------------------------------")
+    print("")
+    print("       Escoja la pagina donde se ejecutaran las pruebas:")
+    print("")
+    print("     1. OWGIS Global")
+    print("     2. OWGIS meteorologia")
+    print("     3. OWGIS Oleaje")
+    print("     4. Todas las anteriores")
+    print("     0. Salir")
+    print("")
+    opcion= input("     >> ")
+    return opcion
 
 
 def main():
-    page = int(sys.argv[1])
+    page = menu()
+    ##system.out()
+    #page = int(sys.argv[1])
     config = configparser.ConfigParser()
     config.read("../modulos/test.conf")
     dir_global = config.get("test","global")
     dir_met = config.get("test","meteo")
     dir_olea = config.get("test","oleaje")
-    if page == 1:
+    if page == '1':
         driver = initDriver("chrome")
         try:
             check_global(dir_global,driver)
         except:
             print('Error en el navegador revisando la pagina: ' + dir_global)
-    elif page == 2:
+    elif page == '2':
         driver = initDriver("chrome")
         try:
             check_meteo(dir_met,driver)
         except:
             print('Error en el navegador revisando la pagina: ' + dir_met)
-    elif page == 3:
+    elif page == '3':
         driver = initDriver("chrome")
         try:
             check_oleaje(dir_olea,driver)
         except:
             print('Error en el navegador revisando la pagina: ' + dir_olea)
-    elif page == 4:
+    elif page == '4':
         try:
             driver = initDriver("chrome")
             check_global(dir_global,driver)
@@ -782,9 +820,14 @@ def main():
             driver = initDriver("chrome")
             check_oleaje(dir_olea,driver)
         except:
-            print('Error en el navegador revisando laa paginas')
+            print('Error en el navegador revisando la paginas')
     else:
-        print("Opcion incorrecta")
+        if page == '0':
+            print("")
+        else:
+            print("Opcion incorrecta")
+            main()
+
 
 
 
