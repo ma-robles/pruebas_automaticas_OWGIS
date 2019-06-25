@@ -16,6 +16,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.firefox.options import Options
+from goes_test import check_goes
 import configparser
 import sys
 import pandas as df
@@ -48,7 +49,18 @@ def initDriver(browser):
         print("------- Navegador no compatible ---------")
         return null
 
-
+def check_trans(driver,nombre):
+    try:
+        for xs in range(10):
+            element = driver.execute_script("owgis.transparency.decreaseTransp();")
+            #time.sleep(1)
+        time.sleep(5)
+        for xs in range(10):
+            element = driver.execute_script("owgis.transparency.increaseTransp();")
+            #time.sleep(1)
+        print('true')
+    except:
+        print('false')
 
 def check_load_streamlines(driver, nombre):
     """
@@ -498,7 +510,7 @@ def create_report(infoName,streamlines, calendar,messenger, animation,v3d):
     #report = df.DataFrame([name,streamlines,calendar],columns=['Nombre','Estatus Streamlines', 'Estatus Calendario'])
     return report
 
-def check_oleaje(dir,driver):
+def check_oleaje(dir,driver, opt):
     """
     Funcion para revisar el OWGIS de oleaje
 
@@ -522,7 +534,7 @@ def check_oleaje(dir,driver):
     except:
         print("La pagina proporcionada no existe o no esta disponible")
         return null
-    driver.execute_script("animatePositionMap(2.0,[-10602433.379006794, 2546668.0769200223]);")
+    #driver.execute_script("animatePositionMap(2.0,[-10602433.379006794, 2546668.0769200223]);")
     for xs in menuLevel1 :
         change_layer(driver,'dropDownLevels1',xs)
         for ys in menuLevel2:
@@ -532,7 +544,10 @@ def check_oleaje(dir,driver):
             streamline = check_load_streamlines(driver,nombre)
             calendar = checkCalendar(driver,nombre)
             rev = check_animation(driver)
-            a3d = change3d(driver,nombre)
+            try:
+                a3d = change3d(driver,nombre)
+            except:
+                a_3ds.append('Error en la version 3d')
             a_3ds.append(a3d)
             animations.append(rev)
             nombres.append(nombre)
@@ -541,8 +556,59 @@ def check_oleaje(dir,driver):
             messenger.append(calendar[1]+" "+streamline[1])
     time.sleep(2)
     df_oleaje = create_report(nombres,streamlines,calendars,messenger,animations,a_3ds)
-    df_oleaje.to_csv("../Data/report_oleaje.csv", encoding='utf-8',index=False)
-    change_bavklayers(driver)
+    if opt == 1 :
+        df_oleaje.to_csv("../Data/report_oleaje.csv", encoding='utf-8',index=False)
+        change_bavklayers(driver)
+    else:
+        df_oleaje.to_csv("../Data/report_oleaje_cen.csv", encoding='utf-8',index=False)
+    time.sleep(5)
+    try:
+        driver.close()
+        print(df_oleaje)
+    except:
+        print(df_oleaje)
+        print("Proceso terminado")
+
+
+def check_tormenta(dir,driver, opt):
+    menuLevel1=['Dom1','Dom2']
+    menuLevel2=['ele']
+    nombres = []
+    calendars = []
+    streamlines = []
+    messenger = []
+    animations = []
+    a_3ds = []
+    print(dir)
+    print("--------Test Marea y Tormenta--------")
+    try:
+        driver.get(dir)
+    except:
+        print("La pagina proporcionada no existe o no esta disponible")
+        return null
+    driver.execute_script("animatePositionMap(2.0,[-10602433.379006794, 2546668.0769200223]);")
+    for xs in menuLevel1 :
+        nombre = xs+"-"+menuLevel2[0]
+        change_layer(driver,'dropDownLevels1',xs)
+        print(nombre)
+        streamline = check_load_streamlines(driver,nombre)
+        calendar = checkCalendar(driver,nombre)
+        check_trans(driver,nombre)
+        rev = check_animation(driver)
+        a3d = change3d(driver,nombre)
+        a_3ds.append(a3d)
+        animations.append(rev)
+        nombres.append(nombre)
+        calendars.append(calendar[0])
+        streamlines.append(streamline[0])
+        messenger.append(calendar[1]+" "+streamline[1])
+    time.sleep(2)
+    df_oleaje = create_report(nombres,streamlines,calendars,messenger,animations,a_3ds)
+    if opt == 1:
+        df_oleaje.to_csv("../Data/report_tormenta.csv", encoding='utf-8',index=False)
+        change_bavklayers(driver)
+    else:
+        df_oleaje.to_csv("../Data/report_tormenta_cen.csv", encoding='utf-8',index=False)
     time.sleep(5)
     try:
         driver.close()
@@ -553,8 +619,51 @@ def check_oleaje(dir,driver):
 
 
 
+def check_calidadAire(dir,driver):
+    menuLevel1=['Dom1']
+    menuLevel2=['o3','Temp2','VtoSup10','PBLH','co','PM10','so2','nox','VarViento']
+    nombres = []
+    calendars = []
+    streamlines = []
+    messenger = []
+    animations = []
+    a_3ds = []
+    print(dir)
+    print("--------Test Calidad del aire--------")
+    try:
+        driver.get(dir)
+    except:
+        print("La pagina proporcionada no existe o no esta disponible")
+        return null
+    driver.execute_script("animatePositionMap(2.0,[-10602433.379006794, 2546668.0769200223]);")
+    for xs in menuLevel2 :
+        nombre = menuLevel1[0]+"-"+xs
+        change_layer(driver,'dropDownLevels2',xs)
+        print(nombre)
+        streamline = check_load_streamlines(driver,nombre)
+        calendar = checkCalendar(driver,nombre)
+        rev = check_animation(driver)
+        a3d = change3d(driver,nombre)
+        a_3ds.append(a3d)
+        animations.append(rev)
+        nombres.append(nombre)
+        calendars.append(calendar[0])
+        streamlines.append(streamline[0])
+        messenger.append(calendar[1]+" "+streamline[1])
+    time.sleep(2)
+    df_oleaje = create_report(nombres,streamlines,calendars,messenger,animations,a_3ds)
+    df_oleaje.to_csv("../Data/report_calidadAire.csv", encoding='utf-8',index=False)
+    change_bavklayers(driver)
+    time.sleep(5)
+    try:
+        driver.close()
+        print(df_oleaje)
+    except:
+        print(df_oleaje)
+        print("Proceso terminado")
 
-def check_meteo(dir,driver):
+
+def check_meteo(dir,driver, op):
     """
     Funcion para revisar el OWGIS de meteorologia
 
@@ -651,7 +760,10 @@ def check_meteo(dir,driver):
                 messenger.append(calendar[1]+" "+streamline[1])
     time.sleep(5)
     df_meteo = create_report(nombres,streamlines,calendars,messenger,animations,a_3ds)
-    df_meteo.to_csv("../Data/report_global.csv", encoding='utf-8',index=False)
+    if op == 1:
+        df_meteo.to_csv("../Data/report_meteo.csv", encoding='utf-8',index=False)
+    elif op == 0:
+        df_meteo.to_csv("../Data/report_meteo_cenapred.csv", encoding='utf-8',index=False)
     change_bavklayers(driver)
     time.sleep(5)
     try:
@@ -660,7 +772,6 @@ def check_meteo(dir,driver):
     except:
         print(df_meteo)
         print("Proceso terminado")
-
 
 
 
@@ -745,7 +856,7 @@ def check_global(dir,driver):
     print("----------------------------------")
     time.sleep(2)
     df_global = create_report(nombres,streamlines,calendars,messenger,animation,a_3ds)
-    df_global.to_csv("../Data/report_meteo.csv", encoding='utf-8',index=False)
+    df_global.to_csv("../Data/report_global.csv", encoding='utf-8',index=False)
     change_bavklayers(driver)
     time.sleep(5)
     try:
@@ -775,7 +886,13 @@ def menu():
     print("     1. OWGIS Global")
     print("     2. OWGIS meteorologia")
     print("     3. OWGIS Oleaje")
-    print("     4. Todas las anteriores")
+    print("     4. OWGIS Marea y Tormenta")
+    print("     5. OWGIS Calidad del aire")
+    print("     6. OWGIS meteorologia cenapred")
+    print("     7. OWGIS Oleaje cenapred")
+    print("     8. OWGIS Marea y Tormenta cenapred")
+    print("     9. GOES")
+    print("     10. Todas las anteriores")
     print("     0. Salir")
     print("")
     opcion= input("     >> ")
@@ -791,6 +908,12 @@ def main():
     dir_global = config.get("test","global")
     dir_met = config.get("test","meteo")
     dir_olea = config.get("test","oleaje")
+    dir_tormenta = config.get("test","tormenta")
+    dir_calidad = config.get("test","aire")
+    dir_met_cen = config.get("test","meteo_cen")
+    dir_olea_cen = config.get("test","oleaje_cen")
+    dir_tormenta_cen = config.get("test","tormenta_cen")
+    goes = config.get("test","goes")
     if page == '1':
         driver = initDriver("chrome")
         try:
@@ -800,35 +923,88 @@ def main():
     elif page == '2':
         driver = initDriver("chrome")
         try:
-            check_meteo(dir_met,driver)
+            check_meteo(dir_met,driver,1)
         except:
             print('Error en el navegador revisando la pagina: ' + dir_met)
     elif page == '3':
         driver = initDriver("chrome")
         try:
-            check_oleaje(dir_olea,driver)
+            check_oleaje(dir_olea,driver,1)
         except:
             print('Error en el navegador revisando la pagina: ' + dir_olea)
     elif page == '4':
+        driver = initDriver("chrome")
+        try:
+            check_tormenta(dir_tormenta,driver,1)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_tormenta)
+    elif page == '5':
+        driver = initDriver("chrome")
+        try:
+            check_calidadAire(dir_calidad,driver)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_calidad)
+    elif page == '6':
+        driver = initDriver("chrome")
+        try:
+            check_meteo(dir_met_cen,driver,0)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_met_cen)
+    elif page == '7':
+        driver = initDriver("chrome")
+        try:
+            check_oleaje(dir_olea_cen,driver, 0)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_olea_cen)
+    elif page == '8':
+        driver = initDriver("chrome")
+        try:
+            check_tormenta(dir_tormenta_cen,driver, 0)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_tormenta_cen)
+    elif page == '9':
+        try:
+            check_goes(goes)
+        except:
+            print('Error en el navegador revisando la pagina: ' + dir_tormenta_cen)
+    elif page == '10':
         try:
             driver = initDriver("chrome")
             check_global(dir_global,driver)
             time.sleep(10)
             driver = initDriver("chrome")
-            check_meteo(dir_met,driver)
+            check_meteo(dir_met,driver,1)
             time.sleep(10)
             driver = initDriver("chrome")
-            check_oleaje(dir_olea,driver)
+            check_oleaje(dir_olea,driver,1)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_tormenta(dir_tormenta,driver,1)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_calidadAire(dir_calidad,driver)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_meteo(dir_met_cen,driver,0)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_oleaje(dir_olea_cen,driver, 0)
+            time.sleep(10)
+            driver = initDriver("chrome")
+            check_tormenta(dir_tormenta_cen,driver, 0)
+            time.sleep(10)
+            check_goes(goes)
         except:
             print('Error en el navegador revisando la paginas')
     else:
         if page == '0':
-            print("")
+            return 0
         else:
             print("Opcion incorrecta")
             main()
 
 
-
-
-main()
+if __name__ == "__main__":
+    opt =1
+    while opt != 0:
+        opt = main()
