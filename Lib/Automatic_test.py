@@ -544,11 +544,11 @@ def check_oleaje(dir,driver, opt):
             streamline = check_load_streamlines(driver,nombre)
             calendar = checkCalendar(driver,nombre)
             rev = check_animation(driver)
-            try:
+            if opt ==1:
                 a3d = change3d(driver,nombre)
-            except:
-                a_3ds.append('Error en la version 3d')
-            a_3ds.append(a3d)
+                a_3ds.append(a3d)
+            else:
+                a_3ds.append("Prueba no disponible para esta OWGIS")
             animations.append(rev)
             nombres.append(nombre)
             calendars.append(calendar[0])
@@ -595,8 +595,11 @@ def check_tormenta(dir,driver, opt):
         calendar = checkCalendar(driver,nombre)
         check_trans(driver,nombre)
         rev = check_animation(driver)
-        a3d = change3d(driver,nombre)
-        a_3ds.append(a3d)
+        if opt ==1:
+            a3d = change3d(driver,nombre)
+            a_3ds.append(a3d)
+        else:
+            a_3ds.append("Prueba no disponible para esta OWGIS")
         animations.append(rev)
         nombres.append(nombre)
         calendars.append(calendar[0])
@@ -705,8 +708,11 @@ def check_meteo(dir,driver, op):
                         streamline = (False,"")
                     calendar = checkCalendar(driver, nombre)
                     rev = check_animation(driver)
-                    a3d = change3d(driver,nombre)
-                    a_3ds.append(a3d)
+                    if op ==1:
+                        a3d = change3d(driver,nombre)
+                        a_3ds.append(a3d)
+                    else:
+                        a_3ds.append("Prueba no disponible para esta OWGIS")
                     animations.append(rev)
                     nombres.append(nombre)
                     calendars.append(calendar[0])
@@ -720,8 +726,11 @@ def check_meteo(dir,driver, op):
                     streamline = check_load_streamlines(driver, nombre)
                     calendar = checkCalendar(driver, nombre)
                     rev = check_animation(driver)
-                    a3d = change3d(driver,nombre)
-                    a_3ds.append(a3d)
+                    if op ==1:
+                        a3d = change3d(driver,nombre)
+                        a_3ds.append(a3d)
+                    else:
+                        a_3ds.append("Prueba no disponible para esta OWGIS")
                     animations.append(rev)
                     nombres.append(nombre)
                     calendars.append(calendar[0])
@@ -736,8 +745,11 @@ def check_meteo(dir,driver, op):
                         streamline = check_load_streamlines(driver, nombre)
                         calendar = checkCalendar(driver, nombre)
                         rev = check_animation(driver)
-                        a3d = change3d(driver,nombre)
-                        a_3ds.append(a3d)
+                        if op ==1:
+                            a3d = change3d(driver,nombre)
+                            a_3ds.append(a3d)
+                        else:
+                            a_3ds.append("Prueba no disponible para esta OWGIS")
                         animations.append(rev)
                         nombres.append(nombre)
                         calendars.append(calendar[0])
@@ -751,8 +763,11 @@ def check_meteo(dir,driver, op):
                 streamline = check_load_streamlines(driver, nombre)
                 calendar = checkCalendar(driver, nombre)
                 rev = check_animation(driver)
-                a3d = change3d(driver,nombre)
-                a_3ds.append(a3d)
+                if op ==1:
+                    a3d = change3d(driver,nombre)
+                    a_3ds.append(a3d)
+                else:
+                    a_3ds.append("Prueba no disponible para esta OWGIS")
                 animations.append(rev)
                 nombres.append(nombre)
                 calendars.append(calendar[0])
