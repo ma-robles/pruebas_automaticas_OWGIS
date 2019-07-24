@@ -6,4 +6,4 @@
 # 3 = OWGIS Oleaje
 # 4 = los 3 anteriores
 source ~/anaconda3/envs/tensorflow/bin/activate selenuim
-python ../Lib/Automatic_test.py 4
+python ../Lib/Automatic_test.py

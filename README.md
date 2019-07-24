@@ -40,7 +40,7 @@ Para ejecutar la pruebas automáticas hay que entrar en carpeta /modulos y ejecu
 
 `./Automatic_test.sh`
 
-Esta instrucción por default ejecuta el script para todos los OWGIS que se tienen implementados, si se desea realizar para uno en específico basta con editar el archivo, dentro del archivo se encuentra las instrucciones para que pueda ser modificado.
+Al momento de ejecutar la instrucción anterior se desplegara un menu para escoger a que OWGIS se le realizaran las pruebas.
 
 Como resultado de la ejecución del script se generan dentro de la carpeta /Data tres tipos de archivos:
 
