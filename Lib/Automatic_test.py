@@ -39,15 +39,34 @@ def initDriver(browser):
         driver = webdriver.Firefox(options=opts)
         return driver
     elif browser == "chrome":
-        d = DesiredCapabilities.CHROME
-        d['loggingPrefs'] = { 'browser':'ALL'}
         options = webdriver.ChromeOptions()
-        options.add_argument("--start-maximized")
-        driver = webdriver.Chrome('../Data/chromedriver_linux64/chromedriver',chrome_options=options,desired_capabilities=d)
+        options.add_argument("start-maximized")
+        #d = DesiredCapabilities.CHROME
+        d = options.to_capabilities()
+        d['loggingPrefs'] = { 'browser':'ALL'}
+        driver = webdriver.Chrome('../Data/chromedriver_linux64/chromedriver',desired_capabilities=d)
         return driver
     else:
         print("------- Navegador no compatible ---------")
         return null
+
+
+def check_internet(driver,dir):
+    driver.get(dir)
+    try:
+        error = driver.find_elements_by_class_name("error-code")
+        if(error[0].text =="DNS_PROBE_FINISHED_NO_INTERNET") or (error[0].text =="ERR_NAME_NOT_RESOLVED") or (error[0].text =="ERR_INTERNET_DISCONNECTED"):
+            print("No Internet Connection");
+            driver.close();
+            return 0
+        else:
+            print("Internet Connected");
+            return 1
+    except:
+        print("Internet Connected");
+        return 1
+
+
 
 def check_trans(driver,nombre):
     try:
@@ -294,7 +313,7 @@ def check_loading(driver):
                     igual = percents
             return True
     except:
-        return True
+        return False
 
 
 def check_animation(driver):
@@ -530,7 +549,8 @@ def check_oleaje(dir,driver, opt):
     print(dir)
     print("--------Test Oleaje--------")
     try:
-        driver.get(dir)
+        if check_internet(driver,dir) == 0:
+            return null
     except:
         print("La pagina proporcionada no existe o no esta disponible")
         return null
@@ -582,7 +602,8 @@ def check_tormenta(dir,driver, opt):
     print(dir)
     print("--------Test Marea y Tormenta--------")
     try:
-        driver.get(dir)
+        if check_internet(driver,dir) == 0:
+            return null
     except:
         print("La pagina proporcionada no existe o no esta disponible")
         return null
@@ -634,7 +655,8 @@ def check_calidadAire(dir,driver):
     print(dir)
     print("--------Test Calidad del aire--------")
     try:
-        driver.get(dir)
+        if check_internet(driver,dir) == 0:
+            return null
     except:
         print("La pagina proporcionada no existe o no esta disponible")
         return null
@@ -689,7 +711,8 @@ def check_meteo(dir,driver, op):
     print(dir)
     print("--------Test Meteorologico--------")
     try:
-        driver.get(dir)
+        if check_internet(driver,dir) == 0:
+            return null
     except:
         print("La pagina proporcionada no existe o no esta disponible")
         return null
@@ -812,7 +835,9 @@ def check_global(dir,driver):
     print(dir)
     print("--------Test "+menuLevel1[0]+"--------")
     try:
-        driver.get(dir)
+        #driver.get(dir)
+        if check_internet(driver,dir) == 0:
+            return null
     except:
         print("La pagina proporcionada no existe o no esta disponible")
         return null
